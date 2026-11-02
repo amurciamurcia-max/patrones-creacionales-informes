@@ -1,22 +1,25 @@
 # Sistema de Procesamiento de Informes - Abstract Factory Avanzado (Java 21)
 
-Repositorio formal con la resolución de la actividad práctica de **Patrones de Creación**, modelado y optimizado bajo estándares contemporáneos de arquitectura de software.
+Repositorio formal para la resolución de la actividad práctica de **Patrones de Creación**, estructurado bajo el paradigma de desarrollo moderno con **Java 21 (LTS)**.
 
 ## 🚀 Arquitectura y Patrones Aplicados
 
-El sistema implementa el patrón **Abstract Factory (Fábrica Abstracta)** para aislar la lógica cliente de la instanciación de familias de objetos relacionados (Categorías vs. Tipos de Informe), mitigando la obsesión por primitivos y garantizando la coherencia estructural del dominio.
+El sistema implementa el patrón **Abstract Factory (Fábrica Abstracta)** para encapsular la variabilidad bidimensional del dominio (Categorías y Tipos de Informes), garantizando el aislamiento del cliente respecto a los constructores concretos y asegurando la coherencia en la creación de familias de objetos.
 
 ### Características de Alta Ingeniería Incluidas:
-* **Programación Defensiva (Parse, Don't Validate):** Validación y tipado estático estricto en la frontera del sistema a través de expresiones regulares (`Pattern` inmutable) y encapsulamiento seguro en el record `InformeId`.
-* **Tipos de Datos Algebraicos (ADT):** Jerarquías cerradas mediante `sealed interface` y la cláusula `permits` para control exhaustivo en tiempo de compilación.
-* **Preservación de LSP con Mónadas:** Sustitución honesta de retornos `null` mediante el uso de `Optional<T>`, gestionando la asimetría de productos de forma segura.
-* **Despacho Exhaustivo:** Uso de expresiones `switch` funcionales (Java 21) que garantizan la cobertura total de variantes operacionales en la fase de compilación.
+* **Programación Defensiva (Parse, Don't Validate):** Validación y tipado estático estricto en la frontera del sistema a través de expresiones regulares (`Pattern` inmutable) y encapsulamiento en el record `InformeId`.
+* **Tipos de Datos Algebraicos (ADT):** Uso de `sealed interface` y la cláusula `permits` para cerrar jerarquías y delegar el control de exhaustividad al compilador.
+* **Seguridad ante Nulos:** Implementación de firmas honestas mediante `Optional<T>` en lugar de retornos `null` tradicionales, mitigando la rigidez vertical descubierta en el Ejercicio 3.
+* **Mapeo de Alta Densidad Operacional:** Registro de fábricas optimizado mediante un `EnumMap` inmutable con costo de acceso constante estricto $O(1)$ sin sobrecosto de hashing.
+* **Garantía de Exhaustividad:** Flujo de despacho polimórfico estructurado mediante expresiones `switch` funcionales (Java 21), forzando el control estricto de los enumerados en tiempo de compilación.
 
 ---
 
 ## 📊 Diagramas de Arquitectura UML (Sintaxis Mermaid)
 
-### 1. Estado Inicial del Sistema (Antes de la Evolución)
+### 1. Estado Inicial del Sistema (Antes de la Evolución - Ejercicio 2)
+Muestra la simetría base del sistema con las categorías funcionales iniciales de Entrada y Salida.
+
 ```mermaid
 classDiagram
     class InformeFactory {
@@ -54,7 +57,9 @@ classDiagram
     SalidaFactory ..> CompraSalida : instantiates
 ```
 
-### 2. Estado Final del Sistema (Después de las Evoluciones A y B)
+### 2. Estado Final del Sistema (Después de la Evolución - Ejercicio 3)
+Muestra la ampliación horizontal con la familia **MIXTA** y la mutación vertical asimétrica con el producto **PEDIDO** protegido mediante `Optional`.
+
 ```mermaid
 classDiagram
     class InformeFactory {
@@ -109,16 +114,26 @@ classDiagram
 
 ---
 
-## 🛠️ Requisitos e Instrucciones de Ejecución
+## 🛠️ Requisitos de Ejecución
 
 * **Java Development Kit (JDK):** Versión 21 o superior de forma mandatoria.
+* **Entorno:** Compatible con cualquier IDE moderno (soporte nativo para VS Code).
 
-Para compilar y ejecutar el ecosistema de pruebas defensivas desde la terminal, ejecute:
+## 💻 Instrucciones para Ejecución en Consola
+
+Para compilar y ejecutar el proyecto manualmente desde la terminal, ejecute los siguientes comandos:
 
 ```bash
-# Compilación de la unidad estructural
+# 1. Compilar el archivo fuente
 javac SistemaInformes.java
 
-# Ejecución del motor general
+# 2. Ejecutar la clase principal
 java SistemaInformes
 ```
+
+## 📊 Dataset de Prueba Evaluado
+El método `main` incluye un vector de pruebas exhaustivo que valida de manera automática:
+1. Flujos convencionales de Entrada y Salida (`ENT_FAC`, `SAL_COM`).
+2. Robustez de la Extensión Horizontal: Categoría `MIXTA`.
+3. Robustez de la Extensión Vertical y validación polimórfica: Tipo `PEDIDO`.
+4. Programación defensiva ante cadenas corruptas, formatos inválidos y entradas nulas (`null`).
